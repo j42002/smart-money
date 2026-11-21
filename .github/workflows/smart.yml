@@ -1,0 +1,33 @@
+name: smart
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: smart
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: tests
+        run: python -m unittest discover -s tests -v
+      - name: scan
+        run: python smart.py scan
+      - name: grade
+        run: python smart.py grade
+      - name: commit data
+        run: |
+          git config user.name "smart-money-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -m "data: scan $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase origin main
+          git push
