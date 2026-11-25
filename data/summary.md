@@ -1,8 +1,8 @@
 # smart-money scoreboard (PAPER ONLY)
 
-Updated: 2026-11-25 09:27 UTC
+Updated: 2026-11-25 19:30 UTC
 
-Trades: 202 | Settled: 0 | Open: 202
+Trades: 215 | Settled: 0 | Open: 215
 Win rate: 0% | P/L: $+0.00 on $0 risked
 Verdict: need 50+ settled
 
