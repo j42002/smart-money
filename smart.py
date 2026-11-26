@@ -15,6 +15,7 @@ CLOB = "https://clob.polymarket.com"
 HERE = os.path.dirname(os.path.abspath(__file__))
 D = os.path.join(HERE, "data")
 PAPER = os.path.join(D, "paper.csv")
+OLD_SEEN = os.path.join(D, "seen.json")  # v1 state, deleted on first v2 run
 SUMMARY = os.path.join(D, "summary.md")
 
 TOP = 10              # wallets from the 30-day PnL leaderboard
@@ -22,7 +23,7 @@ MIN_USD = 500         # whale buy must be at least this big
 STAKE = 10.0          # paper dollars per copy
 MAX_AGE = 12 * 3600   # GitHub cron is throttled to every few hours, so look back 12h
 MAX_ENTRY = 0.90      # don't pay 95c to win 5c
-MAX_CHASE = 0.05      # skip if price already ran 5c+ past the whale
+MAX_CHASE = 0.05      # skip if price moved 5c+ either way since the whale bought
 MIN_SETTLED = 50      # settled positions before a verdict means anything
 
 COLS = ["time", "whale", "wallet", "title", "outcome", "condition_id", "whale_price",
@@ -113,7 +114,7 @@ def pick_entry(whale_price, ask):
         return None, "no book"
     if ask >= MAX_ENTRY:
         return None, f"ask {ask:.2f} too high"
-    if ask - whale_price > MAX_CHASE:
+    if abs(ask - whale_price) > MAX_CHASE:  # either way: ran away, or the game already turned
         return None, f"moved {whale_price:.2f}->{ask:.2f}"
     return ask, "live ask"
 
@@ -135,6 +136,8 @@ def write_paper(R):
 def scan(now=None):
     now = now or time.time()
     os.makedirs(D, exist_ok=True)
+    if os.path.exists(OLD_SEEN):
+        os.remove(OLD_SEEN)
     W = whales()
     print(f"tracking {len(W)} wallets")
     R = read_paper()

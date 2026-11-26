@@ -8,7 +8,7 @@ How it decides (v2):
 - Whale BUY of $500+ in the last 12h, price under 90c
 - Skips markets where the whale bought both sides (market making, not a bet)
 - One position per whale + market + outcome (no fill spam)
-- Entry = the live best ask when the bot sees it (what you'd really pay), skipped if price already ran 5c+
+- Entry = the live best ask when the bot sees it (what you'd really pay), skipped if price moved 5c+ either way
 
 Scoreboard: [`data/summary.md`](data/summary.md). Verdict means nothing under 50 settled.
 

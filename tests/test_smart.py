@@ -46,7 +46,8 @@ class T(unittest.TestCase):
         self.assertIsNone(smart.pick_entry(0.50, 0.56)[0])   # ran away
         self.assertIsNone(smart.pick_entry(0.88, 0.91)[0])   # too pricey
         self.assertIsNone(smart.pick_entry(0.50, None)[0])   # no book
-        self.assertEqual(smart.pick_entry(0.50, 0.45)[0], 0.45)  # cheaper than whale is fine
+        self.assertEqual(smart.pick_entry(0.50, 0.46)[0], 0.46)  # a bit cheaper is fine
+        self.assertIsNone(smart.pick_entry(0.52, 0.03)[0])   # game already turned
 
     def test_resolve_clob(self):
         m = {"closed": True, "tokens": [{"outcome": "Yes", "winner": True}, {"outcome": "No", "winner": False}]}
