@@ -4,6 +4,8 @@ on:
     # off-the-hour minutes; GitHub drops/delays a lot of */15 jobs at :00
     - cron: "7,37 * * * *"
   workflow_dispatch:
+  push:
+    branches: ["claude/**"]   # dry run on dev branches, no data commit
 permissions:
   contents: write
 concurrency:
